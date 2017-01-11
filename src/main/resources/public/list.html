@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel='stylesheet' href='css/bootstrap.min.css'>
+  <link rel="stylesheet" type="text/css" href="/css/tooltip.css">
+  <link rel="stylesheet" type="text/css" href="/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
+</head>
+<body ng-app="test.ui" class="container-fluid" >
+
+<div id="test" ng-controller="myController" class="col-lg-6 col-md-offset-3">
+  <!--<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>-->
+  <!--<form th:action="@{/logout}" method="post">-->
+    <!--<input type="submit" value="Sign Out"/>-->
+  <!--</form>-->
+  <div><h1 class="text-center">Pet Store</h1></div>
+
+  <div>
+    <table class="table">
+      <tbody>
+        <tr >
+          <th style="width: 10%;">Id</th>
+          <th style="width: 35%;">Name</th>
+          <th style="width: 20%;">Status</th>
+          <th style="width: 25%;">Category</th>
+          <th/>
+          <th/>
+          <th/>
+        </tr>
+        <tr ng-class = "{'active': $index % 2}" ng-repeat="pet in pets">
+          <td>{{pet.id}}</td>
+          <td>{{pet.name}}</td>
+          <td>{{pet.status?"Available":"Unavailable"}}</td>
+          <td>{{pet.category.name}}</td>
+          <td><a href="javascript:void(0)" ng-click="deletePet(pet.id)">Delete</a></td>
+          <td><a href="javascript:void(0)" ng-click="viewPet(pet.id)">View</a></td>
+          <td><a href="javascript:void(0)" ng-click="updatePet(pet.id)">Update</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <button ng-style="{width: '100%', 'margin-top':'10px', 'margin-bottom':'10px','border':'solid 2px grey', 'border-radius': '25px', 'background-color':'lightgrey'}"
+            ng-click="switchAddorCancel()">
+      {{addorCancel}}
+    </button>
+  </div>
+  <div ng-show="addPetForm" ng-init="addPetForm=false">
+    <form name="addPet" action="pet" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="name">Pet Name</label>
+        <input type="text" class="form-control" name="name" id="name" ng-model="petName" placeholder="Your Pet Name" autocomplete="off" required>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+          <select name="category" id="category" class="form-control" ng-model="categoryModel" required>
+            <option ng-repeat="category in categories" value={{category.id}} ng-selected="categoryModel==category.name">{{category.name}}</option>
+            <option value=0>Custom</option>
+          </select>
+          <input type="text" ng-disabled="categoryModel != 0" class="form-control" name="newCategoryName"
+                 placeholder="Custom Category Name" ng-required="categoryModel == 0" ng-model="customCategory"/>
+      </div>
+
+      <div class="form-group">
+        <label>Upload Photos</label>
+        <div id="photosDiv">
+          <input type='file' class='form-control' name='photos' accept='image/*'/>
+        </div>
+        <button type="button" class="btn btn-info btn-sm" ng-click="addMorePic()">More</button>
+      </div>
+
+      <div class="form-group">
+        <label for="tagKeyword"><i class="fa fa-home"></i> Tags <small>(separated with ';')</small></label>
+        <input type="text" class="form-control" id="tagKeyword" name="tags" ng-model="tagKeyword"
+               ng-blur="lostFocus()" ng-focus="showResults=true"
+               ng-change="SearchTags()" autocomplete="off" required>
+        <div data-ng-show="showResults" style="position: absolute; float:left; width:96%; border-left: solid 1px lightgrey;
+        border-right: solid 1px lightgrey">
+          <div data-ng-repeat="tag in searchResultTags" data-ng-show="searchResultTags.length > 0" class="searchResultTags" >
+            <a ng-click="runLink(tag.id, tag.name);" ng-mouseenter="setFocusedItem($index);" ng-mouseleave="setFocusedItem(-1);"
+               data-ng-class="{tagItem: true, tagItemActive : focuseditem == $index}">
+                <span>
+                    {{tag.name}}
+                </span>
+            </a>
+          </div>
+          <div data-ng-show="showSearching">
+            Searching...
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <button type="submit" style="float:right" ng-class="{'disabled': addPet.$invalid, 'btn': true, 'btn-success': true}">Submit</button>
+    </form>
+
+  </div>
+
+  <div class="overlay" ng-show="overlayShow" ng-click="hideOverlay()">
+    <div class="overlay-bg"></div>
+    <div class="overlay-inside col-lg-6 col-md-offset-3">
+
+      <div data-ng-click="$event.stopPropagation()" class="overlay-inside-content well">
+
+        <div style="text-align:center;height:100%" ng-show="preloadShow">
+          <div style="height:20%"></div>
+          <div style="height:80%"><img src="images/preloader.gif"/></div>
+        </div>
+
+        <table class="table" ng-show="viewDetailShow">
+          <caption class="text-center" style="font-size:20px;">Pet Details</caption>
+          <tobdy>
+            <tr><td style="width:20%"><h4>Name:</h4></td><td class="text-primary"><h5>{{viewName}}</h5></td></tr>
+            <tr><td><h4>Status:</h4></td><td class="text-danger"><h5>{{viewStatus}}</h5></td></tr>
+            <tr><td><h4>Category:</h4></td><td class="text-success"><h5>{{viewCategory}}</h5></td></tr>
+            <tr><td><h4>Tags:</h4></td>
+              <td>
+                <h5>
+                  <span ng-repeat="tag in viewTags">
+                    <span class="bg-primary" style="padding:5px; border-radius:10px">{{tag.name}}</span>
+                    <span>;</span>
+                  </span>
+                  </h5>
+              </td>
+            </tr>
+            <tr><td><h4>Photos:</h4></td>
+              <td>
+                <span ng-repeat="photo in viewPhotos">
+                <img src="{{photo.url}}" class="img-rounded">
+                </span>
+              </td>
+            </tr>
+          </tobdy>
+        </table>
+
+        <!--<div ng-show="updatePetShow" ng-init="updatePetShow=false">-->
+          <!--<table class="table">-->
+            <!--<caption class="text-center" style="font-size:20px;">Pet Details</caption>-->
+            <!--<tobdy>-->
+              <!--<tr><td style="width:20%"><h4>Name:</h4></td><td class="text-primary">-->
+                <!--<h5>-->
+                  <!--<input type="text" class="form-control" name="name" id="newName"-->
+                         <!--ng-model="viewName" autocomplete="off" required></h5></td>-->
+              <!--</tr>-->
+              <!--<tr><td><h4>Status:</h4></td><td class="text-danger"><h5>{{viewStatus}}</h5></td></tr>-->
+              <!--<tr><td><h4>Category:</h4></td><td class="text-success"><h5>-->
+                <!--<div class="form-group">-->
+                  <!--<select name="category" id="viewCategory" class="form-control" ng-model="viewCategory" required>-->
+                    <!--<option ng-repeat="category in categories" value={{category.id}} ng-selected="viewCategory==category.name">{{category.name}}</option>-->
+                    <!--<option value=0>Custom</option>-->
+                  <!--</select>-->
+                  <!--<input type="text" ng-disabled="categoryModel != 0" class="form-control" name="newCategoryName"-->
+                         <!--placeholder="Custom Category Name" ng-required="categoryModel == 0" ng-model="customCategory"/>-->
+                <!--</div>-->
+              <!--</h5></td></tr>-->
+              <!--<tr><td><h4>Tags:</h4></td>-->
+                <!--<td>-->
+                  <!--<h5>-->
+                    <!--<div class="form-group">-->
+                      <!--<input type="text" class="form-control" id="tagKeyword1" name="tags" ng-model="tagKeyword"-->
+                             <!--ng-blur="lostFocus()" ng-focus="showResults=true"-->
+                             <!--ng-change="SearchTags()" autocomplete="off" required>-->
+                      <!--<div data-ng-show="showResults" style="position: absolute; float:left; width:96%; border-left: solid 1px lightgrey;-->
+                        <!--border-right: solid 1px lightgrey">-->
+                        <!--<div data-ng-repeat="tag in searchResultTags" data-ng-show="searchResultTags.length > 0" class="searchResultTags" >-->
+                          <!--<a ng-click="runLink(tag.id, tag.name);" ng-mouseenter="setFocusedItem($index);" ng-mouseleave="setFocusedItem(-1);"-->
+                             <!--data-ng-class="{tagItem: true, tagItemActive : focuseditem == $index}">-->
+                            <!--<span>-->
+                                <!--{{tag.name}}-->
+                            <!--</span>-->
+                          <!--</a>-->
+                        <!--</div>-->
+                        <!--<div data-ng-show="showSearching">-->
+                          <!--Searching...-->
+                        <!--</div>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</h5>-->
+                <!--</td>-->
+              <!--</tr>-->
+              <!--<tr><td><h4>Photos:</h4></td>-->
+                <!--<td>-->
+                <!--<span ng-repeat="photo in viewPhotos">-->
+                <!--<img src="{{photo.url}}" class="img-rounded">-->
+                <!--</span>-->
+                <!--</td>-->
+              <!--</tr>-->
+            <!--</tobdy>-->
+          <!--</table>-->
+        <!--</div>-->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+<script>
+  angular.module("test.ui", [])
+      .controller('myController', ['$scope', '$http', '$compile', '$timeout', '$element', function(scope, http, compile, timeout, element) {
+//        scope.color0 = 'white';
+//        scope.color1 = 'lightblue';
+        scope.addorCancel = 'Add';
+        scope.photoCount = 1;
+        scope.showSearching = false;
+        scope.overlayShow = false;
+        scope.preloadShow = false;
+        scope.viewDetailShow = false;
+
+        scope.viewPet = function (id) {
+          scope.reqMethod = "post"
+          scope.overlayShow = true;
+          scope.preloadShow = true;
+          scope.viewDetailShow = false;
+          var response = http.get("/pet/"+id);
+          response.success(function (pet) {
+            if (pet.id) {
+              scope.preloadShow = false;
+              scope.viewName = pet.name;
+              scope.viewStatus = pet.status ? "Available" : "Unavailable"
+              scope.viewCategory = pet.category.name
+              scope.viewTags = pet.tags
+              scope.viewPhotos = pet.photoUrls;
+              scope.viewDetailShow = true;
+            }
+            else {
+              scope.restfulError = pet.msg;
+              scope.overlayShow = false;
+              scope.preloadShow = false;
+            }
+          })
+        };
+        scope.updatePet = function (id) {
+          scope.reqMethod = "put"
+          if (scope.categories == null) {
+            var response = http.get("/allCategories")
+            response.success(function (json) {
+              scope.categories = json;
+            })
+          }
+          var response1 = http.get("/allTags")
+          response1.success(function (json) {
+            scope.tags = json;
+          })
+          scope.addPetForm = true
+          var response = http.get("/pet/"+id);
+          response.success(function (pet) {
+            scope.petName = pet.name;
+//            scope.viewStatus = pet.status ? "Available" : "Unavailable"
+            scope.categoryModel = pet.category.name;
+            scope.tagKeyword="";
+            for(var i=0; i < pet.tags.length; i++) {
+              scope.tagKeyword += pet.tags[i].name + ";"
+            }
+            scope.viewPhotos = pet.photoUrls;
+          })
+        };
+        scope.hideOverlay = function () {
+          scope.overlayShow = false;
+        }
+        scope.deletePet = function (id) {
+          var response = http.delete("/pet/"+id)
+          response.success(function (model) {
+            if (model.msg != 'ok') {
+              scope.restfulError = model.msg;
+              return;
+            }
+            for (var i=0; i < scope.pets.length; i++){
+              if (scope.pets[i].id==id) {
+                scope.pets.splice(i,1);
+                break;
+              }
+            }
+          })
+        };
+//        scope.showResults = false;
+        scope.focuseditem = -1;
+        scope.setFocusedItem = function (id) {
+          scope.focuseditem = id;
+        }
+        scope.lostFocus = function () {
+          if (scope.focuseditem < 0) {
+            scope.showResults = false
+          }
+        }
+
+        scope.runLink = function (id, name) {
+          var currentTags = scope.tagKeyword.split(",");
+          currentTags[currentTags.length - 1] = name + ",";
+          scope.tagKeyword = currentTags.join(",")
+          scope.searchResultTags = [];
+          angular.element(document.getElementById('tagKeyword').focus());
+        };
+
+        scope.SearchTags = function () {
+          if (!scope.tagKeyword) {
+            scope.searchResultTags = [];
+            return;
+          }
+          scope.showSearching = true;
+//          alert(scope.tagKeyword.replace(/;/g, "%3b"))
+          var response = http.get("/tags/"+scope.tagKeyword.replace(/;/g, "%3b"))
+          response.success(function (json) {
+//            scope.showResults = true;
+            scope.showSearching = false;
+            scope.searchResultTags = json;
+          })
+        };
+
+        scope.addMorePic =  function(){
+          scope.photoCount++;
+          angular.element(document.getElementById('photosDiv')).append("<input type='file' class='form-control' name='photos" + "" + "' accept='image/*'/>");
+        };
+        scope.switchAddorCancel = function() {
+          if (scope.addorCancel=='Add') {
+            scope.addorCancel='Cancel'
+            var response = http.get("/allCategories")
+            response.success(function (json) {
+              scope.categories = json;
+            })
+            var response1 = http.get("/allTags")
+            response1.success(function (json) {
+              scope.tags = json;
+            })
+            scope.addPetForm = true
+          }
+          else {
+            scope.addorCancel='Add'
+            scope.addPetForm = false;
+          }
+        };
+
+        scope.addPet = function () {
+
+        };
+
+        var response = http.get("/allPets")
+        response.success(function (json) {
+          scope.pets = json;
+        })
+      }])
+
+</script>
+</html>

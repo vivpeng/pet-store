@@ -1,0 +1,32 @@
+/***************END REM MIXIN***********************************/
+.mytooltip {
+    position: relative;
+    text-transform: none;
+    font-weight: normal; }
+.mytooltip .tooltip-content {
+    display: block;
+    border: 1px #ccc solid;
+    padding: 20px 10px;
+    background-color: #fff;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: none;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    width: 200px; }
+html.modern .mytooltip .tooltip-content {
+    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px; }
+.mytooltip .link {
+    cursor: pointer; }
+.mytooltip .link:hover {
+    color: #ce143c; }
+.mytooltip:hover .link .icon {
+    color: #ce143c; }
+.mytooltip .icon {
+    font-size: 120%;
+    position: relative;
+    top: 2px; }

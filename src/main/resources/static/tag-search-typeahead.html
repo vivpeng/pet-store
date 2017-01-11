@@ -1,0 +1,18 @@
+<label for="tagKeyword"><i class="fa fa-home"></i> Tags <small>(separated with ',')</small></label>
+<input type="text" class="form-control" id="tagKeyword" name="tags" ng-model="tagKeyword"
+       ng-blur="lostFocus()" ng-focus="showResults=true"
+       ng-change="SearchTags()" autocomplete="off" required>
+<div data-ng-show="showResults" style="position: absolute; float:left; width:96%; border-left: solid 1px lightgrey;
+        border-right: solid 1px lightgrey">
+    <div data-ng-repeat="tag in searchResultTags" data-ng-show="searchResultTags.length > 0" class="searchResultTags" >
+        <a ng-click="runLink(tag.id, tag.name);" ng-mouseenter="setFocusedItem($index);" ng-mouseleave="setFocusedItem(-1);"
+           data-ng-class="{tagItem: true, tagItemActive : focuseditem == $index}">
+                <span>
+                    {{tag.name}}
+                </span>
+        </a>
+    </div>
+    <div data-ng-show="showSearching">
+        Searching...
+    </div>
+</div>

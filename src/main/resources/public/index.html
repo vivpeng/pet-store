@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body ng-app="test.ui">
+<div id="test" ng-controller="myController">
+  <button ng-style="{float: 'top', 'margin-left':'83%', width: '120px', 'margin-top':'10px', 'margin-bottom':'10px','border':'solid 2px grey', 'background-color':'lightgrey'}" ng-click="switchLang()" ng-init="lang='EN'">
+    {{lang}}
+  </button>
+  <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+  <form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+  </form>
+  <table>
+    <tr ng-style="{'margin-top':'10px', 'border':'solid 2px black', 'background-color':color{{$index % 2}}}" ng-repeat="item in mylist">
+      <td ng-style="{'width':'5%'}">{{item.seq}}</td>
+      <td ng-style="{'width':'10%'}">{{item.categoryCd}}</td>
+      <td ng-style="{'width':'30%'}">{{item.itemCd}}</td>
+      <td ng-style="{'width':'40%'}" ng-show="lang=='FR'">{{item.name.en}}</td>
+      <td ng-style="{'width':'40%'}" ng-show="lang=='EN'">{{item.name.fr}}</td>
+      <td ng-style="{'width':'15%'}">{{item.auditProps.updatedDateTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+    </tr>
+  </table>
+</div>
+</body>
+<script>
+  angular.module("test.ui", [])
+      .controller('myController', function($scope) {
+        $scope.color0 = 'lightgrey';
+        $scope.color1 = 'white';
+        $scope.switchLang = function() {
+          if ($scope.lang=='EN') {
+            $scope.lang='FR'
+          }
+          else {
+            $scope.lang='EN'
+          }
+        };
+        $scope.mylist=[{itemCd: "DB_FILL", name: {en: "Baked Fill", fr: "Fourrés"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 100},
+          {itemCd: "DF_BOSTON", name: {en: "Boston Cream", fr: "Crème Boston"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 101},
+          {itemCd: "DF_VANILLA", name: {en: "Vanilla Cream", fr: "Vanilla Cream"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 102},
+          {itemCd: "DF_BANANA", name: {en: "Banana Cream", fr: "Crème à la banane"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 103},
+          {itemCd: "DF_BSPLIT", name: {en: "Banana Split", fr: "Banane royale"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 104},
+          {itemCd: "DF_BLUE", name: {en: "Blueberry", fr: "Bleuets"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 105},
+          {itemCd: "DF_CANMAPLE", name: {en: "Canadian Maple", fr: "Boston à l'érable"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 107},
+          {itemCd: "DF_CHERRY", name: {en: "Cherry", fr: "Cerises"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 108},
+          {itemCd: "DF_CHOC", name: {en: "Chocolate", fr: "Chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 109},
+          {itemCd: "DF_COCONUT", name: {en: "Coconut Cream", fr: "Crème à la noix de coco"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 110},
+          {itemCd: "DF_DELCHERRY", name: {en: "Deluxe Cherry", fr: "Cerises deluxe"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 111},
+          {itemCd: "DF_LEMON", name: {en: "Lemon", fr: "Citron"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 112},
+          {itemCd: "DF_MAPLESWIRL", name: {en: "Maple Swirl", fr: "Tourbillon à l'érable"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 113},
+          {itemCd: "DF_RASP", name: {en: "Raspberry", fr: "Framboises"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 114},
+          {itemCd: "DF_SPICEAPPLE", name: {en: "Spiced Apple", fr: "Pommes épicées"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 115},
+          {itemCd: "DF_STRAW", name: {en: "Strawberry", fr: "Fraises"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 116},
+          {itemCd: "DF_STRAWBANANA", name: {en: "Strawberry Banana Coconut", fr: "Fraises, bananes et noix de coco"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 117},
+          {itemCd: "DF_STRAWCOCONUT", name: {en: "Strawberry Coconut", fr: "Fraises et noix de coco"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 119},
+          {itemCd: "DF_STRAWVAN", name: {en: "Strawberry Vanilla", fr: "Fraises et vanille"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 120},
+          {itemCd: "DF_DOUBLE_STRWBRY", name: {en: "Double Strawberry", fr: "Double Strawberry"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 121},
+          {itemCd: "DF_STRWBRY_CREAM", name: {en: "Strawberry Cream", fr: "Strawberry Cream"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 123},
+          {itemCd: "DF_STRWBRY_COCONUT", name: {en: "Strawberry Coconut", fr: "Strawberry Coconut"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 124},
+          {itemCd: "DF_STRWBRY_COCONUT_CREAM", name: {en: "Strawberry Coconut Cream", fr: "Strawberry Coconut Cream"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 125},
+          {itemCd: "DF_STRWBRY_SWIRL", name: {en: "Strawberry Swirl", fr: "Tourbillon à la fraise"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 126},
+          {itemCd: "DF_STRWBRY_SUPREME", name: {en: "Strawberry Supreme", fr: "Strawberry Supreme"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 127},
+          {itemCd: "DF_3CHOCO", name: {en: "Triple Chocolate", fr: "Choco-folie"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 128},
+          {itemCd: "DF_VENETIAN", name: {en: "Venetian Cream", fr: "Crème vénitienne"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 129},
+          {itemCd: "DF_TORTOISE", name: {en: "Pecan Tortoise Torte", fr: "Chocolat caramel aux pacanes"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 130},
+          {itemCd: "DF_STANLEY_CUP", name: {en: "Stanley Cup", fr: "Stanley Cup"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 136},
+          {itemCd: "DF_OREO", name: {en: "Oreo", fr: "Oreo"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 137},
+          {itemCd: "DB_RING", name: {en: "Baked Rings", fr: "Anneaux"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 200},
+          {itemCd: "DR_DIP_CHOCO", name: {en: "Chocolate Dip", fr: "Glacé au chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 226},
+          {itemCd: "DR_DIP_HONEY", name: {en: "Honey Dip", fr: "Glacé au miel"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 227},
+          {itemCd: "DR_DIP_VANCOLOUR", name: {en: "Vanilla Dip with Coloured Sprinkle", fr: "Glacé à la vanille avec vermicelles colorés"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 228},
+          {itemCd: "DR_DIP_MAPLE", name: {en: "Maple Dip (1 Maple Type is required)", fr: "Glacé à l'érable (1 variété à l'érable requise)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 229},
+          {itemCd: "DR_DIP_GAMEDAY", name: {en: "Game Day (Vanilla Dip)", fr: "Jour de match (glacé vanille)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 230},
+          {itemCd: "DR_DIP_VANCHOCO", name: {en: "Vanilla Dip with Chocolate Shot", fr: "Glacé à la vanille au chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 231},
+          {itemCd: "DR_DIP_CHOCOSHOT", name: {en: "Vanilla Dip/Coloured Sprinkle & Choc. Shot", fr: "Glacé à la vanille avec verm. colorés et choc."}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 232},
+          {itemCd: "DR_VENETIAN", name: {en: "Venetian Apple", fr: "Pommes et crème vénitienne"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 233},
+          {itemCd: "DR_SUGAR_LOOP", name: {en: "Sugar Loop", fr: "Anneau Sucré"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 234},
+          {itemCd: "DR_STRWBRY_DIP", name: {en: "Strawberry Dip", fr: "Strawberry Dip"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 235},
+          {itemCd: "DR_STRWBRY_SPRINKLE", name: {en: "Strawberry Sprinkle", fr: "Strawberry Sprinkle"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 236},
+          {itemCd: "DR_SWEET_SALTY", name: {en: "Sweet and Salty", fr: "Sweet and Salty"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 237},
+          {itemCd: "D_PINK_RIBBON", name: {en: "Pink Ribbon (test market)", fr: "Pink Ribbon (test market)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 238},
+          {itemCd: "D_STRAWBERRY_SPRNK", name: {en: "Strawberry Sprinkle", fr: "Glacé aux fraises"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 239},
+          {itemCd: "DR_GAMEDAY", name: {en: "Game Day", fr: "Game Day"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 240},
+          {itemCd: "DB_UWHITE", name: {en: "Unfinished White Cake", fr: "Gâteau blanc non fini"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 300},
+          {itemCd: "DC_OLD_GLAZED", name: {en: "Old Fashion Glazed", fr: "À l'ancienne glacé"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 346},
+          {itemCd: "DC_OLD_PLAIN", name: {en: "Old Fashion Plain", fr: "À l'ancienne ordinaire"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 347},
+          {itemCd: "DC_APPLE_CIDER", name: {en: "Apple Cider", fr: "Apple Cider"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 348},
+          {itemCd: "DC_APPLE_CIN", name: {en: "Apple Cinnamon (seasonal)", fr: "Apple Cinnamon (seasonal)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 349},
+          {itemCd: "DC_AUTUMN", name: {en: "Autumn Spice (seasonal)", fr: "Épices d'automne (saisonnier)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 350},
+          {itemCd: "DC_CINNAMON", name: {en: "Cinnamon Sugar", fr: "Sucre à la cannelle"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 351},
+          {itemCd: "DC_HARVEST_APPLE", name: {en: "Harvest Apple (seasonal)", fr: "Aux pommes à l’ancienne (saisonnier)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 352},
+          {itemCd: "DC_OLD_DIP", name: {en: "Old Fashion Dip", fr: "Glacé à l'ancienne"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 353},
+          {itemCd: "DC_OLD_SNOW", name: {en: "Old Fashion Snow", fr: "À l'ancienne poudré"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 354},
+          {itemCd: "DC_OLD_SUGAR", name: {en: "Old Fashion Sugar", fr: "À l'ancienne au sucre"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 355},
+          {itemCd: "DC_PEANUT", name: {en: "Peanut Crunch", fr: "Croquant au beurre d'arachide"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 356},
+          {itemCd: "DC_TOAST_COCONUT", name: {en: "Toasted Coconut", fr: "Noix de coco grillée"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 357},
+          {itemCd: "DC_WHITE_COCONUT", name: {en: "White Coconut", fr: "Noix de coco"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 358},
+          {itemCd: "DC_OF_STRWBRY_DIP", name: {en: "Old Fashioned Strawberry Dip", fr: "Old Fashioned Strawberry Dip"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 359},
+          {itemCd: "DB_UCHOCO", name: {en: "Unfinished Chocolate Cake", fr: "Gâteau au chocolat non fini"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 400},
+          {itemCd: "DC_CHOCO", name: {en: "Chocolate Glazed", fr: "Chocolat glacé"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 460},
+          {itemCd: "DC_2CHOCO", name: {en: "Double Chocolate", fr: "Double chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 461},
+          {itemCd: "DC_CANDY_CANE", name: {en: "Candy Cane Chocolate (seasonal)", fr: "Chocolat canne de bonbon (saisonnier)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 462},
+          {itemCd: "DC_CHOCOMINT", name: {en: "Chocolate Mint", fr: "Choco-menthe"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 463},
+          {itemCd: "DC_CHOCO_PEANUT", name: {en: "Chocolate Peanut Crunch", fr: "Croquant au beurre d'arachide et chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 464},
+          {itemCd: "DC_CHOCO_TOAST_COCONUT", name: {en: "Chocolate Toasted Coconut ", fr: "Chocolat et noix de coco grillée"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 465},
+          {itemCd: "DC_CHOCO_WHITE_COCONUT", name: {en: "Chocolate White Coconut", fr: "Chocolat et noix de coco"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 466},
+          {itemCd: "DC_STRWBRY_DOUBLE_CHOC", name: {en: "Strawberry Double Chocolate", fr: "Double chocolat et fraises"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 467},
+          {itemCd: "DC_CHOCO_MARBLE", name: {en: "Chocolate Marble", fr: "Marbré au chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 468},
+          {itemCd: "DC_CHOCO_SNOW", name: {en: "Chocolate Snow", fr: "Chocolat à la neige"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 469},
+          {itemCd: "DR_FRITTER_APPLE", name: {en: "Apple Fritters", fr: "Beignet aux pommes"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 535},
+          {itemCd: "DR_APPLE_BANANA", name: {en: "Apple Banana Dumpling", fr: "Beignet pommes, bananes et épices"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 536},
+          {itemCd: "DR_APPLE_DUMP", name: {en: "Apple Dumpling", fr: "Beignet aux pommes"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 537},
+          {itemCd: "DR_FRITTER_BLUE", name: {en: "Blueberry Fritter", fr: "Beignet aux bleuets"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 538},
+          {itemCd: "DR_FRITTER_APPLECAR", name: {en: "Caramel Apple Fritter", fr: "Beignet aux pommes et caramel"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 539},
+          {itemCd: "D_DUTCHIE", name: {en: "Dutchies", fr: "Hollandaise"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 540},
+          {itemCd: "DS_CRULLER_HONEY", name: {en: "Honey Cruller", fr: "Roussette au miel"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 541},
+          {itemCd: "DS_CRULLER_CHOCO", name: {en: "Chocolate Cruller", fr: "Roussette au chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 542},
+          {itemCd: "DS_CRULLER_MAPLE", name: {en: "Maple Cruller", fr: "Roussette à l'érable"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 543},
+          {itemCd: "DC_SOURCREAM_GLAZED", name: {en: "Sour Cream Glazed", fr: "Crème sure glacé"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 567},
+          {itemCd: "DC_SOURCREAM_PLAIN", name: {en: "Sour Cream Plain", fr: "Crème sure ordinaire"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 568},
+          {itemCd: "DC_SOURCREAM_SUGAR", name: {en: "Sour Cream Sugar", fr: "Crème sure au sucre"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 569},
+          {itemCd: "DC_SOURCREAM_CIN", name: {en: "Sour Cream Cinnamon", fr: "Crème sure à la cannelle"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 570},
+          {itemCd: "DS_CINN_GLAZED", name: {en: "Cinnamon Roll - Glazed", fr: "Brioche à la cannelle - glacée"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 571},
+          {itemCd: "DS_CINN_CHOCO", name: {en: "Cinnamon Roll - Chocolate", fr: "Brioche à la cannelle - chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 572},
+          {itemCd: "DS_CINN_FROSTED", name: {en: "Cinnamon Roll - Frosted", fr: "Brioche à la cannelle - classique"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 573},
+          {itemCd: "DS_GAMEDAY", name: {en: "Game Day Supreme ", fr: "Jour de match"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 574},
+          {itemCd: "DS_LONGJOHN", name: {en: "Long John", fr: "Long John"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: ""}, seq: 575},
+          {itemCd: "D_LONGJOHN_CRML", name: {en: "Long John Caramel", fr: "Long John (caramel)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 576},
+          {itemCd: "DS_WALNUT", name: {en: "Walnut Crunch", fr: "Bâtonnets aux noix"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 577},
+          {itemCd: "DC_PUMPKIN", name: {en: "Pumpkin Spice (seasonal)", fr: "Épices d'automne (saisonnier)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 578},
+          {itemCd: "DC_BLUE_GLAZED", name: {en: "Blueberry Glazed (seasonal)", fr: "Bleuets glacés (saisonnier)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 579},
+          {itemCd: "DS_CANDY", name: {en: "Candy Bar Supreme", fr: "Barre choco-bonbons garnie de M&M’s"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 580},
+          {itemCd: "D_IHEARTYOU", name: {en: "I <3 You", fr: "coup de <3"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 581},
+          {itemCd: "D_CRNCH_CRML", name: {en: "Crunchy Caramel", fr: "Crunchy Caramel"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 582},
+          {itemCd: "D_PACZKI_STRAWBERRY", name: {en: "Strawberry Paczki (SW ON / MI Only)", fr: "Strawberry Paczki (SW ON / MI Only)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 583},
+          {itemCd: "D_PACZKI_STRAWBERRY_MI", name: {en: "Strawberry Paczki (SW ON / MI Only)", fr: "Strawberry Paczki (SW ON / MI Only)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 583},
+          {itemCd: "D_PACZKI_VNTN_CRM", name: {en: "Venetian Cream Paczki (SW ON / MI Only)", fr: "Venetian Cream Paczki (SW ON / MI Only)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 584},
+          {itemCd: "D_PACZKI_VNTN_CRM_MI", name: {en: "Venetian Cream Paczki (SW ON / MI Only)", fr: "Venetian Cream Paczki (SW ON / MI Only)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 584},
+          {itemCd: "D_PACZKI_RASPBERRY", name: {en: "Raspberry Paczki (SW ON / MI Only)", fr: "Raspberry Paczki (SW ON / MI Only)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 585},
+          {itemCd: "D_PACZKI_RASPBERRY_MI", name: {en: "Raspberry Paczki (SW ON / MI Only)", fr: "Raspberry Paczki (SW ON / MI Only)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 585},
+          {itemCd: "D_PACZKI_LEMON", name: {en: "Lemon Paczki (SW ON / MI Only)", fr: "Lemon Paczki (SW ON / MI Only)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 586},
+          {itemCd: "D_PACZKI_LEMON_MI", name: {en: "Lemon Paczki (SW ON / MI Only)", fr: "Lemon Paczki (SW ON / MI Only)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 586},
+          {itemCd: "D_GINGERBREAD", name: {en: "Gingerbread", fr: "Glacé au pain d’épices"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 587},
+          {itemCd: "D_ST_PATS_BLOOM", name: {en: "St. Patricks Day Bloom", fr: "St. Patricks Day Bloom"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 588},
+          {itemCd: "D_CRML_CHOC", name: {en: "Caramel Chocolate", fr: "Beigne au glacé au chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 589},
+          {itemCd: "D_MAPLE_GLAZED", name: {en: "Maple Glazed", fr: "Erable anneaux"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 590},
+          {itemCd: "DF_BBLOOM", name: {en: "Blueberry Bloom (seasonal)", fr: "Pensée aux bleuets (saisonnier)"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 591},
+          {itemCd: "DF_STRAWBLOOM", name: {en: "Strawberry Bloom", fr: "Pensée aux fraises"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 592},
+          {itemCd: "DF_DOUBLE_STRWBRY_BLM", name: {en: "Double Strawberry Bloom", fr: "Double Strawberry Bloom"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 593},
+          {itemCd: "D_EASTER_EGG", name: {en: "Easter Egg", fr: "Coco de pâques"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 594},
+          {itemCd: "DF_SP_APPLE_COBBLER", name: {en: "Spiced Apple Cobbler", fr: "Pommes et épices croustade"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 601},
+          {itemCd: "DF_BLUEBERRY_COBBLER", name: {en: "Blueberry Cobbler", fr: "Bleuets croustade"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 602},
+          {itemCd: "DF_RASPBERRY_COBBLER", name: {en: "Raspberry Cobbler", fr: "Framboises croustade"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 603},
+          {itemCd: "DF_STRAWBERRY_COBBLER", name: {en: "Strawberry Cobbler", fr: "Pensée aux fraises croustade"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 604},
+          {itemCd: "DF_CHERRY_COBBLER", name: {en: "Cherry Cobbler", fr: "Cerises croustade"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 605},
+          {itemCd: "D_APPLE_COBBLER", name: {en: "Apple Cobbler", fr: "Crustade aux pommes"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 606},
+          {itemCd: "D_BIRTHDAY_CAKE", name: {en: "Birthday Cake", fr: "gâteau d'anniversaire"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 607},
+          {itemCd: "D_STRAWBERRY_SCAKE", name: {en: "Strawberry Shortcake", fr: "Shortcake aux fraises"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 608},
+          {itemCd: "D_CHOC_CHZCK", name: {en: "Chocolate Cheesecake", fr: "gâteau au fromage au chocolat"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 609},
+          {itemCd: "D_STRAW_CHZCK", name: {en: "Strawberry Cheesecake", fr: "gâteau au fromage à la fraise"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 610},
+          {itemCd: "D_FOOTBALL", name: {en: "Football", fr: "Football"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 611},
+          {itemCd: "D_PUMPKIN_PIE", name: {en: "Pumpkin Pie", fr: "Pumpkin Pie"}, categoryCd: "DONUT", auditProps: {updatedDateTime: 1407762856352, updatedUserId: "100056"}, seq: 612}]
+      })
+
+</script>
+</html>
