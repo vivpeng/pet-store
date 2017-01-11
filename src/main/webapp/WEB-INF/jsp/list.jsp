@@ -18,8 +18,14 @@
 <div id="test" ng-controller="myController" class="col-lg-6 col-md-offset-3">
 
   <div><h1 class="text-center">Pet Store</h1></div>
-  <span>(${user})</span>  <a href="logout"><span style="text-decoration: underline;">Logout</span></a>
 
+  <span>I am ${user}</span>
+
+  <span data-ng-show="'${user}'=='admin'" data-tooltip="Admin user has full authentication." data-tooltiplabel="" data-tooltipicon="fa fa-question-circle"></span>
+  <span data-ng-show="'${user}'=='user'" data-tooltip="Regular user cannot execute Delete operation!!" data-tooltiplabel="" data-tooltipicon="fa fa-question-circle"></span>
+
+
+  <a href="logout"><span style="text-decoration: underline;">Logout</span></a>
   <div ng-click="closeReminder()" ng-show="reminder" ng-init="reminder=true" ng-cloak>
     <div class="border: 1px solid black;" >
       <h3 class="bg-success" ng-show="${message!=null}">${message}</h3>
@@ -102,22 +108,6 @@
   <pet-detail-overlay ng-cloak ng-show="overlayShow" ng-click="hideOverlay()"></pet-detail-overlay>
 
 </div>
-
-<div ng-controller="testController as testCtrl">
-  <h4>test</h4>
-  <ul ng-click="mytest()">
-    <li>1</li>
-    <li>2</li>
-  </ul>
-  <h4>test</h4>
-  <ul ng-click="testCtrl.mytest1()">
-    <li>1</li>
-    <li>2</li>
-  </ul>
-
-</div>
-<span data-tooltip="This is a Test!!" data-tooltiplabel="" data-tooltipicon="fa fa-question-circle"></span>
-
 
 </body>
 </html>
